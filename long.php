@@ -1,3 +1,3 @@
 <?php
-    echo "Tao chỉ thử";
+    echo "Tao chỉ thử thôi";
 ?>
