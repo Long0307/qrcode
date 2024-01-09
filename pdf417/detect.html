@@ -1,0 +1,51 @@
+<input type="file" onchange="decodeImage()">
+
+<div id="result"></div>
+<script src="pdf417.js"></script>
+<script>
+  // Nhúng thư viện pdf417-js
+
+function decodeImage() {
+
+  const decoded = pdf417.decode(imageData); 
+  
+  const file = document.querySelector('input[type="file"]').files[0];
+
+  // Đọc file dưới dạng data URL
+  const reader  = new FileReader();
+  reader.readAsDataURL(file); 
+  reader.onloadend = () => {
+    decodePDF417(reader.result); 
+  }
+
+  function decodePDF417(imageSrc) {
+    
+    // Tạo Image object từ data URL
+    const img = new Image();
+    img.src = imageSrc;  
+
+    // Decode khi image load xong
+    img.onload = () => {
+
+      // Lấy canvas context 
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      // Vẽ ảnh lên canvas
+      ctx.drawImage(img, 0, 0); 
+
+      // Lấy image data
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+      // Decode bằng pdf417-js
+      const decoded = pdf417.decode(imageData);
+
+      // Hiển thị kết quả
+      document.getElementById('result').textContent = decoded.text;
+
+    }
+
+  }
+
+}
+</script>
